@@ -18,4 +18,4 @@ RUN npm run build
 COPY . .
 
 EXPOSE 8000
-CMD [ "/opt/tinystacks-secret-env-vars-wrapper", "node", "built/server.js" ]
+CMD [ "/opt/tinystacks-secret-env-vars-wrapper", "node", "dist/server.main.js" ]
