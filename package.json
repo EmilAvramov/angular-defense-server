@@ -2,13 +2,13 @@
 	"name": "server",
 	"version": "1.0.0",
 	"description": "",
-	"main": "server.main.ts",
+	"main": "./src/server.main.ts",
 	"scripts": {
 		"build": "npx tsc",
 		"start": "node dist/index.js",
 		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.main.js\"",
-		"dev:ts": "nodemon server.main.ts",
-		"load": "ts-node databaseLoad/databaseLoad.ts"
+		"dev:ts": "nodemon src/server.main.ts",
+		"load": "ts-node src/databaseLoad/databaseLoad.ts"
 	},
 	"keywords": [],
 	"author": "",

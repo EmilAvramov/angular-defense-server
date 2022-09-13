@@ -1,6 +1,6 @@
-import sequelize from './src/config/database';
-import app from './src/config/express';
-import { port } from './src/config/settings';
+import sequelize from './config/database';
+import app from './config/express';
+import { port } from './config/settings';
 
 try {
 	sequelize
