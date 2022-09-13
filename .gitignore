@@ -1,3 +1,13 @@
+# Docker
+docker-compose.yml
+
+# Node
+.env
 node_modules/
 built/
-docker-compose.yml
+dist/
+
+# Initial server data
+data.ts
+device_data.json
+device_list.json
