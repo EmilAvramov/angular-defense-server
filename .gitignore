@@ -11,3 +11,25 @@ dist/
 data.ts
 device_data.json
 device_list.json
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+.editorconfig
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
