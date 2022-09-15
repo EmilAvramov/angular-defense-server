@@ -1,14 +1,14 @@
 import sequelize from './config/database';
 import app from './config/express';
-import { port } from './config/settings';
+import { PORT } from './config/settings';
 
 try {
 	sequelize
 		.authenticate()
 		.then(() => console.log('Database connected...'))
 		.then(() => {
-			app.listen(port, () =>
-				console.log(`Server is listening to port ${port}...`)
+			app.listen(PORT, () =>
+				console.log(`Server is listening to port ${PORT}...`)
 			);
 		});
 } catch (err) {
