@@ -5,7 +5,7 @@
 	"main": "./src/server.main.ts",
 	"scripts": {
 		"build": "npx tsc",
-		"start": "node dist/index.js",
+		"start": "npm install && npm run build && node dist/server.main.js",
 		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.main.js\"",
 		"dev:ts": "nodemon src/server.main.ts",
 		"load": "ts-node src/databaseLoad/databaseLoad.ts"

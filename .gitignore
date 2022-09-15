@@ -5,6 +5,7 @@ docker-compose.yml
 .env
 node_modules/
 built/
+dist/
 
 # Initial server data
 data.ts
