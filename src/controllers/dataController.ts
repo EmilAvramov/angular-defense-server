@@ -3,6 +3,14 @@ import { getNews, getRecommended } from '../services/dataService';
 
 const router = Router();
 
+router.get('/health', async (req, res) => {
+	try {
+		res.status(200).json({status: 'healthy'})
+	} catch (err: any) {
+		res.status(400).json({status: 'not healthy'})
+	}
+})
+
 router.get('/recommended', async (req, res) => {
 	try {
 		const {latest, popular} = await getRecommended()
