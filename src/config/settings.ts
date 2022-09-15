@@ -1,4 +1,4 @@
-export const PORT = 8081
+export const PORT = 8080
 export const production = {}
 export const saltRounds = 10
 export const sessionName = 'session'
