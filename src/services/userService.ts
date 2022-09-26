@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { saltRounds } from '../config/settings';
 import { User } from '../interfaces/User.interface';
-import { UserModel } from '../models/models';
+import { PostingModel, UserModel } from '../models/models';
 
 const jwtSecret = process.env['NG_APP_SECRET'];
 const blackList = new Set();
@@ -90,6 +90,11 @@ export const editUserDetails = async (id: number, data: User) => {
 		let phone = data.phone;
 		let address = data.address;
 		let city = data.city;
+		const userData = await UserModel.findByPk(id);
+		await PostingModel.update(
+			{ userEmail: email },
+			{ where: { id: userData?.id } }
+		);
 		return await UserModel.update(
 			{ firstName, lastName, email, phone, address, city },
 			{ where: { id } }
@@ -101,7 +106,6 @@ export const editUserDetails = async (id: number, data: User) => {
 
 export const editUserPassword = async (id: number, password: string) => {
 	try {
-		console.log(id, password)
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 		return await UserModel.update(
 			{ password: hashedPassword },
