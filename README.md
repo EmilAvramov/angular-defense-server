@@ -50,16 +50,18 @@ To host in the cloud, you will need an AWS-RDS hosted PostreSQL server and a Cod
   - POST /list/search | optionally with ```query```, ```limit``` and ```offset``` -> queried postings data
   - GET /user/:id | ```user ID``` in params -> postings for specific user
   - POST /create | with ```posting payload``` in body -> create new posting
-  - PUT /edit/:id | ```posting ID``` in params with ```price``` and ```comments``` in body -> edits specific posting
-  - DELETE /delete/:id | ```posting ID``` in params -> deletes specific posting
+  - ** PUT /edit/:id | ```posting ID``` in params with ```price``` and ```comments``` in body -> edits specific posting
+  - ** DELETE /delete/:id | ```posting ID``` in params -> deletes specific posting
 - /users
   - POST /register | with ```register payload``` -> registers new user
   - POST /login | with ```login payload``` -> logs user in
   - POST /logout | with ```accessToken``` in body -> logs user out
   - POST /validate | with ```token``` in body -> validates user token
-  - PATCH /edit/details/:id | ```user ID``` in params and ```profile payload``` in body -> changes user details
-  - PATCH /edit/password/:id | ```user ID``` in params and ```password``` in body -> changes user password
-  - DELETE /delete/:id | ```user ID``` in params -> deletes specific user
+  - ** PATCH /edit/details/:id | ```user ID``` in params and ```profile payload``` in body -> changes user details
+  - ** PATCH /edit/password/:id | ```user ID``` in params and ```password``` in body -> changes user password
+  - ** DELETE /delete/:id | ```user ID``` in params -> deletes specific user
+
+** Token of active user (if any) will be matched against back-end data for validation.
 
 ### Credits
 
