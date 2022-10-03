@@ -24,6 +24,7 @@ export const getPostings = async (
 				],
 				limit,
 				offset,
+				order: [['id', 'DESC']],
 			});
 		}
 		return await PostingModel.findAll({
@@ -39,6 +40,7 @@ export const getPostings = async (
 			],
 			limit,
 			offset,
+			order: [['id', 'DESC']],
 		});
 	} catch (err: any) {
 		throw new Error(err.message);
@@ -59,6 +61,7 @@ export const getUserPostings = async (id: number) => {
 					required: true,
 				},
 			],
+			order: [['id', 'DESC']],
 		});
 	} catch (err: any) {
 		throw new Error(err.message);
