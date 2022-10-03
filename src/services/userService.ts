@@ -75,15 +75,30 @@ export const validateToken = (token: string) => {
 	if (blackList.has(token)) {
 		throw new Error('Token is blacklisted');
 	}
-	return jwt.verify(token, jwtSecret!);
+	return jwt.verify(token, jwtSecret!) as User;
+};
+
+export const validateUser = async (token: string) => {
+	const user = validateToken(token);
+	const userData = await UserModel.findByPk(user.id);
+	if (user.email === userData?.email) {
+		return true;
+	}
+	return false;
 };
 
 export const logout = (token: string) => {
 	blackList.add(token);
 };
 
-export const editUserDetails = async (id: number, data: User) => {
+export const editUserDetails = async (
+	id: number,
+	data: User,
+	token: string
+) => {
 	try {
+		
+
 		let firstName = data.firstName;
 		let lastName = data.lastName;
 		let email = data.email;
@@ -104,8 +119,14 @@ export const editUserDetails = async (id: number, data: User) => {
 	}
 };
 
-export const editUserPassword = async (id: number, password: string) => {
+export const editUserPassword = async (
+	id: number,
+	password: string,
+	token: string
+) => {
 	try {
+		const validatedUser = jwt.verify(token, jwtSecret!);
+		console.log(validatedUser);
 		const hashedPassword = await bcrypt.hash(password, saltRounds);
 		return await UserModel.update(
 			{ password: hashedPassword },
@@ -116,8 +137,10 @@ export const editUserPassword = async (id: number, password: string) => {
 	}
 };
 
-export const deleteUser = async (id: number) => {
+export const deleteUser = async (id: number, token: string) => {
 	try {
+		const validatedUser = jwt.verify(token, jwtSecret!);
+		console.log(validatedUser);
 		return await UserModel.destroy({ where: { id } });
 	} catch (err: any) {
 		throw new Error(err.message);

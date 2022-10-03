@@ -50,7 +50,8 @@ router.patch('/edit/details/:id', (req, res) => {
 	try {
 		let id = Number(req.params.id);
 		let data = req.body;
-		res.status(200).json(editUserDetails(id, data));
+		let token = req.rawHeaders[13];
+		res.status(200).json(editUserDetails(id, data, token));
 	} catch (err: any) {
 		res.status(400).json({ message: err.message });
 	}
@@ -60,7 +61,8 @@ router.patch('/edit/password/:id', (req, res) => {
 	try {
 		let id = Number(req.params.id);
 		let password = req.body.password;
-		res.status(200).json(editUserPassword(id, password));
+		let token = req.rawHeaders[13];
+		res.status(200).json(editUserPassword(id, password, token));
 	} catch (err: any) {
 		res.status(400).json({ error: err.message });
 	}
@@ -68,7 +70,8 @@ router.patch('/edit/password/:id', (req, res) => {
 
 router.delete('/delete/:id', (req, res) => {
 	try {
-		res.status(200).json(deleteUser(Number(req.params.id)));
+		let token = req.rawHeaders[13];
+		res.status(200).json(deleteUser(Number(req.params.id), token));
 	} catch (err: any) {
 		res.status(400).json({ message: err.message });
 	}
