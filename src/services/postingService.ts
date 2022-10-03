@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { Posting } from '../interfaces/Posting.interface';
 import { PostingModel, UserModel, DeviceModel } from '../models/models';
+import { validatePostingOwner } from './validationService';
 
 export const getPostings = async (
 	query: string = '',
@@ -75,20 +76,29 @@ export const createPosting = async (payload: Posting) => {
 export const editPosting = async (
 	id: number,
 	comments: string | undefined,
-	price: number | undefined
+	price: number | undefined,
+	token: string
 ) => {
 	try {
+		let check = await validatePostingOwner(id, token);
+		if (!check) {
+			throw new Error('User not authorized');
+		}
 		return await PostingModel.update({ comments, price }, { where: { id } });
 	} catch (err: any) {
 		throw new Error(err.message);
 	}
 };
 
-export const deletePosting = async (id: number) => {
+export const deletePosting = async (id: number, token: string) => {
 	try {
-		const posting = await PostingModel.findByPk(id)
-		await PostingModel.destroy({where: {id}})
-		return posting
+		let check = await validatePostingOwner(id, token);
+		if (!check) {
+			throw new Error('User not authorized');
+		}
+		const posting = await PostingModel.findByPk(id);
+		await PostingModel.destroy({ where: { id } });
+		return posting;
 	} catch (err: any) {
 		throw new Error(err.message);
 	}

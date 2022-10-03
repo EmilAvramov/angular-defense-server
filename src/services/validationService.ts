@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../interfaces/User.interface';
-import { UserModel } from '../models/models';
+import { PostingModel, UserModel } from '../models/models';
 
 const jwtSecret = process.env['NG_APP_SECRET'];
 const blackList = new Set();
@@ -22,6 +22,15 @@ export const validateUser = async (token: string) => {
 	const user = validateToken(token);
 	const userData = await UserModel.findByPk(user.id);
 	if (user.email === userData?.email) {
+		return true;
+	}
+	return false;
+};
+
+export const validatePostingOwner = async (id: number, token: string) => {
+	const user = validateToken(token);
+	const posting = await PostingModel.findByPk(id);
+	if (user.email === posting?.userEmail) {
 		return true;
 	}
 	return false;

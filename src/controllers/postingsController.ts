@@ -51,7 +51,8 @@ router.put('/edit/:id', async (req, res) => {
 		const id = Number(req.params.id);
 		const comments = req.body.comments;
 		const price = req.body.price;
-		const response = await editPosting(id, comments, price);
+		const token = req.rawHeaders[13];
+		const response = await editPosting(id, comments, price, token);
 		res.status(200).json(response);
 	} catch (err: any) {
 		res.status(400).json({ message: err.message });
@@ -61,7 +62,8 @@ router.put('/edit/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
 	try {
 		const id = Number(req.params.id);
-		const response = await deletePosting(id);
+		const token = req.rawHeaders[13];
+		const response = await deletePosting(id, token);
 		res.status(200).json(response);
 	} catch (err: any) {
 		res.status(400).json({ message: err.message });
