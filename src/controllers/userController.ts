@@ -3,11 +3,11 @@ import {
 	register,
 	login,
 	logout,
-	validateToken,
 	editUserDetails,
 	editUserPassword,
 	deleteUser,
 } from '../services/userService';
+import { validateToken } from '../services/validationService';
 
 const router = Router();
 

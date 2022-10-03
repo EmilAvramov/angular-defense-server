@@ -1,11 +1,7 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { saltRounds } from '../config/settings';
 import { User } from '../interfaces/User.interface';
 import { PostingModel, UserModel } from '../models/models';
-
-const jwtSecret = process.env['NG_APP_SECRET'];
-const blackList = new Set();
+import { hashPassword, matchPasswords } from './encryptionService';
+import { blacklistToken, signToken, validateUser } from './validationService';
 
 const createSession = (user: User) => {
 	const payload = {
@@ -19,9 +15,7 @@ const createSession = (user: User) => {
 		city: user.city,
 	};
 
-	const token = jwt.sign(payload, jwtSecret as string, {
-		expiresIn: '2d',
-	});
+	const token = signToken(payload);
 
 	return {
 		id: user.id,
@@ -42,7 +36,8 @@ export const register = async (data: User) => {
 		throw new Error('Email is already taken');
 	}
 
-	const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+	const hashedPassword = await hashPassword(data.password)
+	
 	const user = await UserModel.create({
 		email: data.email,
 		password: hashedPassword,
@@ -62,7 +57,7 @@ export const login = async (data: { email: string; password: string }) => {
 	if (!user) {
 		throw new Error('Incorrect credentials');
 	}
-	const matchPassword = await bcrypt.compare(data.password, user.password);
+	const matchPassword = await matchPasswords(data.password, user.password)
 
 	if (!matchPassword) {
 		throw new Error('Incorrect credentials');
@@ -71,24 +66,8 @@ export const login = async (data: { email: string; password: string }) => {
 	return createSession(user);
 };
 
-export const validateToken = (token: string) => {
-	if (blackList.has(token)) {
-		throw new Error('Token is blacklisted');
-	}
-	return jwt.verify(token, jwtSecret!) as User;
-};
-
-export const validateUser = async (token: string) => {
-	const user = validateToken(token);
-	const userData = await UserModel.findByPk(user.id);
-	if (user.email === userData?.email) {
-		return true;
-	}
-	return false;
-};
-
 export const logout = (token: string) => {
-	blackList.add(token);
+	blacklistToken(token);
 };
 
 export const editUserDetails = async (
@@ -97,8 +76,10 @@ export const editUserDetails = async (
 	token: string
 ) => {
 	try {
-		
-
+		let check = await validateUser(token);
+		if (!check) {
+			throw new Error('User not authorized');
+		}
 		let firstName = data.firstName;
 		let lastName = data.lastName;
 		let email = data.email;
@@ -125,9 +106,11 @@ export const editUserPassword = async (
 	token: string
 ) => {
 	try {
-		const validatedUser = jwt.verify(token, jwtSecret!);
-		console.log(validatedUser);
-		const hashedPassword = await bcrypt.hash(password, saltRounds);
+		let check = await validateUser(token);
+		if (!check) {
+			throw new Error('User not authorized');
+		}
+		const hashedPassword = await hashPassword(password)
 		return await UserModel.update(
 			{ password: hashedPassword },
 			{ where: { id } }
@@ -139,8 +122,10 @@ export const editUserPassword = async (
 
 export const deleteUser = async (id: number, token: string) => {
 	try {
-		const validatedUser = jwt.verify(token, jwtSecret!);
-		console.log(validatedUser);
+		let check = await validateUser(token);
+		if (!check) {
+			throw new Error('User not authorized');
+		}
 		return await UserModel.destroy({ where: { id } });
 	} catch (err: any) {
 		throw new Error(err.message);

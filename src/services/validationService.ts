@@ -5,9 +5,11 @@ import { UserModel } from '../models/models';
 const jwtSecret = process.env['NG_APP_SECRET'];
 const blackList = new Set();
 
-export const signToken = () => {
-    
-}
+export const signToken = (payload: any) => {
+	return jwt.sign(payload, jwtSecret as string, {
+		expiresIn: '2d',
+	});
+};
 
 export const validateToken = (token: string) => {
 	if (blackList.has(token)) {
@@ -23,4 +25,8 @@ export const validateUser = async (token: string) => {
 		return true;
 	}
 	return false;
+};
+
+export const blacklistToken = async (token: string) => {
+	blackList.add(token);
 };
