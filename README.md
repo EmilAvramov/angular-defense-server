@@ -6,6 +6,8 @@ Engine used is Express. Controllers handle the different endpoints and call on s
 
 ### Technologies used
 
+** Taken offline due to ongoing costs in AWS
+
 - Front-end - [Details](https://github.com/EmilAvramov/angular-defense-client)
 - Back-end - Javascript (Typescript), Sequelize ORM for PostreSQL, deployed via AWS CodeBuild
 - Database Hosting - PostgreSQL hosted on AWS-RDS
